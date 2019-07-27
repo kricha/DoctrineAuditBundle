@@ -1,0 +1,74 @@
+{% macro dump(value, separator) %}
+    {% spaceless %}
+        {% if value.label is defined %}
+            {{ value.label }}
+        {% elseif value is iterable %}
+            {% for k, v in value %}
+                {{ k }}: {{ _self.dump(v) }}{{ separator|default('<br/>')|raw }}
+            {% endfor %}
+        {% else %}
+            {{ value }}
+        {% endif %}
+    {% endspaceless %}
+{% endmacro dump %}
+
+
+{% macro humanize(entity, entry) %}
+    {% set diffs = entry.diff|json_decode(true) %}
+    {% set subject = entity|namespace_to_short_class~' #'~entry.object_id %}
+
+    {% if entry.type == constant('Kricha\\DoctrineAuditBundle\\AuditManager::INSERT') %}
+        {% set action = 'inserted' %}
+    {% elseif entry.type == constant('Kricha\\DoctrineAuditBundle\\AuditManager::UPDATE') %}
+        {% set action = 'updated' %}
+    {% elseif entry.type == constant('Kricha\\DoctrineAuditBundle\\AuditManager::DELETE') %}
+        {% set action = 'deleted' %}
+        {% set source = diffs %}
+    {% elseif entry.type == constant('Kricha\\DoctrineAuditBundle\\AuditManager::ASSOCIATE') %}
+        {% set action = 'associated' %}
+        {% set source = diffs.source %}
+        {% set target = diffs.target %}
+        {% set direction = 'to' %}
+    {% elseif entry.type == constant('Kricha\\DoctrineAuditBundle\\AuditManager::DISSOCIATE') %}
+        {% set action = 'dissociated' %}
+        {% set source = diff.source %}
+        {% set target = diff.target %}
+        {% set direction = 'from' %}
+    {% else %}
+        {% set action = '???' %}
+    {% endif %}
+
+    <code><a href="{{ path('kricha_doctrine_entity_audit_history', { 'entity': entity|namespace_to_param, 'id': entry.object_id }) }}"
+             class="code">{{ subject|namespace_to_short_class }}</a></code>
+    {% if source is defined and subject != source.label %}
+        <em>({{ source.label }})</em>
+    {% endif %}
+    has been <b>{{ action }}</b>
+    {% if target is defined %}
+        {% set subject = target.class~'#'~target.id %}
+        {{ direction }} <code><a
+                href="{{ path('kricha_doctrine_entity_audit_entry', { 'entity': target.class|namespace_to_param, 'id': target.id }) }}">{{ subject }}</a></code>
+        {% if subject != target.label %}
+            (<em>{{ _self.dump(target) }}</em>)
+        {% endif %}
+    {% endif %}
+    by <b>{{ entry.changer is null ? 'unknown user' : entry.changer }}</b>
+{% endmacro %}
+
+{% macro badge(text, type) %}
+    {% if type is defined and type starts with 'bg-' %}
+        {% set prefix = '' %}
+    {% else %}
+        {% set prefix = 'badge-' %}
+    {% endif %}
+    <span class="badge {{ prefix ~ type|default('secondary') }}">{{ text }}</span>
+{% endmacro %}
+
+{% macro text(text, type) %}
+    {% if type is defined and type starts with 'bg-' %}
+        {% set prefix = '' %}
+    {% else %}
+        {% set prefix = 'text-' %}
+    {% endif %}
+    <span class="{{ prefix ~ type|default('secondary') }}">{{ text }}</span>
+{% endmacro %}

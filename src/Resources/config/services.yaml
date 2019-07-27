@@ -1,0 +1,28 @@
+services:
+    _defaults:
+        public: false
+    Kricha\DoctrineAuditBundle\Controller\AuditController:
+        tags: ['controller.service_arguments']
+    Kricha\DoctrineAuditBundle\EventSubscriber\AuditSubscriber:
+        arguments: ['@Kricha\DoctrineAuditBundle\AuditManager']
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+    Kricha\DoctrineAuditBundle\EventSubscriber\SchemaAuditSubscriber:
+        arguments: ['@Kricha\DoctrineAuditBundle\AuditManager']
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+    Kricha\DoctrineAuditBundle\Reader\AuditReader:
+        arguments: ['@Kricha\DoctrineAuditBundle\AuditConfiguration', '@Doctrine\ORM\EntityManagerInterface']
+    
+    Kricha\DoctrineAuditBundle\Twig\Extension\EntityAuditExtension:
+        tags: ['twig.extension']
+    Kricha\DoctrineAuditBundle\User\TokenStorageUsernameCallable:
+        arguments: ["%kricha_doctrine_audit.configuration%"]
+        calls:
+            - [setToken, ['@security.token_storage']]
+    Kricha\DoctrineAuditBundle\AuditConfiguration:
+        arguments: ["%kricha_doctrine_audit.configuration%"]
+        calls:
+            - [setUsernameCallable, ['@Kricha\DoctrineAuditBundle\User\TokenStorageUsernameCallable']]
+    Kricha\DoctrineAuditBundle\AuditManager:
+        arguments: ['@Kricha\DoctrineAuditBundle\AuditConfiguration']
