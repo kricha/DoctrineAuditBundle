@@ -29,8 +29,7 @@ class AuditSubscriber implements EventSubscriber
     {
         $em  = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
-
-        $start = \microtime(true);
+        
         $this->manager->collectScheduledUpdates($uow, $em);
         $this->manager->collectScheduledInsertions($uow, $em);
         $this->manager->collectScheduledDeletions($uow, $em);
@@ -39,12 +38,11 @@ class AuditSubscriber implements EventSubscriber
 
         $this->loggerBackup = $em->getConnection()->getConfiguration()->getSQLLogger();
         $loggerChain        = new LoggerChain();
-        $loggerChain->addLogger(new AuditLogger(function () use ($em, $start): void {
+        $loggerChain->addLogger(new AuditLogger(function () use ($em): void {
             // flushes pending data
             $em->getConnection()->getConfiguration()->setSQLLogger($this->loggerBackup);
             $this->manager->processChanges($em);
-            $end = \microtime(true);
-            dump('kricha', $end-$start);
+            $this->manager->resetChangeset();
         }));
 
         if ($this->loggerBackup instanceof SQLLogger) {

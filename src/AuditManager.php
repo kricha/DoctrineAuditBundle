@@ -29,6 +29,9 @@ class AuditManager
     {
         $this->auditConfiguration = $auditConfiguration;
     }
+    public function resetChangeset(){
+        $this->changes = [];
+    }
 
     public function collectScheduledInsertions(UnitOfWork $uow, EntityManager $em): void
     {
