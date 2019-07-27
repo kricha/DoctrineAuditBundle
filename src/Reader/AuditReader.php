@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Kricha\DoctrineAuditBundle\Reader;
 
-use DH\DoctrineAuditBundle\Reader\AuditEntry;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManagerInterface;
@@ -81,7 +80,6 @@ class AuditReader
 
         /** @var Statement $statement */
         $statement = $queryBuilder->execute();
-        $statement->setFetchMode(\PDO::FETCH_CLASS, AuditEntry::class);
 
         return $statement->fetchAll();
     }
@@ -168,7 +166,6 @@ class AuditReader
 
         /** @var Statement $statement */
         $statement = $queryBuilder->execute();
-//        $statement->setFetchMode(\PDO::FETCH_CLASS, AuditEntry::class);
 
         return $statement->fetchAll();
     }

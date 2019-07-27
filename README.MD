@@ -1,6 +1,6 @@
 # DoctrineAuditBundle
 
-Inspired by 
+Inspired by
 
 This bundle creates audit logs for all Doctrine ORM database related changes:
 
@@ -14,7 +14,7 @@ managed through standard **ORM** operations.
 
 **NOTE:** audit cannot track DQL or direct SQL updates or delete statement executions.
 
-This bundle is inspired by [damienharper/doctrine-audit-bundle](https://github.com/DamienHarper/DoctrineAuditBundle) and 
+This bundle is inspired by [damienharper/doctrine-audit-bundle](https://github.com/DamienHarper/DoctrineAuditBundle) and
 [simplethings/entity-audit-bundle](https://github.com/simplethings/EntityAuditBundle.git)
 
 
@@ -84,19 +84,19 @@ By default, DoctrineAuditBundle won't audit any entity, you have to configure wh
 
 ```yaml
 // app/config/config.yml (symfony < 3.4)
-// config/packages/dh_doctrine_audit.yaml (symfony >= 3.4)
+// config/packages/kricha_doctrine_audit.yaml (symfony >= 3.4)
 kricha_doctrine_audit:
     entities:
         App\Entity\Order: ~
         App\Entity\User: ~
 ```
 
-All `Order` and `User` properties will be audited. 
+All `Order` and `User` properties will be audited.
 Though it is possible to exclude some of them from the audit process.
 
 ```yaml
 // app/config/config.yml (symfony < 3.4)
-// config/packages/dh_doctrine_audit.yaml (symfony >= 3.4)
+// config/packages/kricha_doctrine_audit.yaml (symfony >= 3.4)
 kricha_doctrine_audit:
     entities:
         App\Entity\Order: ~   # all MyAuditedEntity1 properties are audited
@@ -110,7 +110,7 @@ It is also possible to specify properties that are globally ignored by the audit
 
 ```yaml
 // app/config/config.yml (symfony < 3.4)
-// config/packages/dh_doctrine_audit.yaml (symfony >= 3.4)
+// config/packages/kricha_doctrine_audit.yaml (symfony >= 3.4)
 kricha_doctrine_audit:
     ignored_columns:    # properties ignored by the audit process in any audited entity
         - createdAt
@@ -119,12 +119,12 @@ kricha_doctrine_audit:
 
 ### Audit tables naming format
 
-Audit table names are composed of a prefix, the audited table name and a suffix. 
+Audit table names are composed of a prefix, the audited table name and a suffix.
 By default, the prefix is empty and the suffix is `_audit`. Though, they can be customized.
 
 ```yaml
 // app/config/config.yml (symfony < 3.4)
-// config/packages/dh_doctrine_audit.yaml (symfony >= 3.4)
+// config/packages/kricha_doctrine_audit.yaml (symfony >= 3.4)
 kricha_doctrine_audit:
     table_prefix: ''
     table_suffix: '_audit'
@@ -137,12 +137,12 @@ following command to review the new audit tables in the update schema queue.
 
 ```bash
 # symfony < 3.4
-app/console doctrine:schema:update --dump-sql 
+app/console doctrine:schema:update --dump-sql
 ```
 
 ```bash
 # symfony >= 3.4
-bin/console doctrine:schema:update --dump-sql 
+bin/console doctrine:schema:update --dump-sql
 ```
 
 **Notice**: DoctrineAuditBundle currently **only** works with a DBAL Connection and EntityManager named **"default"**.
@@ -163,7 +163,7 @@ bin/console doctrine:migrations:migrate
 ```
 
 #### Using Doctrine Schema
-    
+
 ```bash
 # symfony < 3.4
 app/console doctrine:schema:update --force
@@ -184,7 +184,7 @@ Add the following routes to the routing configuration to enable the included aud
 kricha_doctrine_audit:
     resource: "@KrichaDoctrineAuditBundle/Controller/"
     type: annotation
-``` 
+```
 
 It is possible to filter results by event type by calling `AuditReader::filterBy` method before getting the results.
 
