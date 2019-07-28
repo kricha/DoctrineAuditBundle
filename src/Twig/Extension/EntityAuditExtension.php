@@ -22,6 +22,7 @@ class EntityAuditExtension extends AbstractExtension
             new TwigFilter('namespace_to_short_class', [$this, 'namespaceToShortClass']),
             new TwigFilter('audi_label_type', [$this, 'labelType']),
             new TwigFilter('json_decode', 'json_decode'),
+            new TwigFilter('entity_class_name', 'get_class'),
         ];
     }
 
