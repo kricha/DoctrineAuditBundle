@@ -11,15 +11,16 @@ cache:
         - $HOME/.composer/cache
 
 php:
-    - 7.1
-    - 7.2
-    - 7.3
+    # - 7.1
+    # - 7.2
+    # - 7.3
 services:
-    - mysql
+    # - mysql
+    # - postgresql
 env:
-    - DB=mysql
-    - DB=sqlite
-    - DB=pgsql
+    # - DB=mysql
+    # - DB=sqlite
+    # - DB=pgsql
 
 before_install:
     - if [[ $DB == 'mysql' ]]; then mysql -u root -e 'select version()'; fi
