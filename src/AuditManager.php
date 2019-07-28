@@ -302,18 +302,21 @@ class AuditManager
                 $data   = $entityChanges['data'];
                 switch ($action) {
                     case self::INSERT:
-                        $queries[] = $this->insert($em, $data[0], $data[1]);
+                        $query = $this->insert($em, $data[0], $data[1]);
                         break;
                     case self::UPDATE:
-                        $queries[] = $this->update($em, $data[0], $data[1]);
+                        $query = $this->update($em, $data[0], $data[1]);
                         break;
                     case self::DELETE:
-                        $queries[] = $this->remove($em, $data[0], $data[1], $data[2]);
+                        $query = $this->remove($em, $data[0], $data[1], $data[2]);
                         break;
                     case self::ASSOCIATE:
                     case self::DISSOCIATE:
-                        $queries[] = $this->toggleAssociation($action, $em, $data[0], $data[1]);
+                        $query = $this->toggleAssociation($action, $em, $data[0], $data[1]);
                         break;
+                }
+                if ($query) {
+                    $queries[] = $query;
                 }
             }
 
