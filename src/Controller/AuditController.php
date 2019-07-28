@@ -43,9 +43,10 @@ class AuditController extends AbstractController
         $entries = $auditReader->getAuditsPager($entity, $id, $page, AuditReader::PAGE_SIZE);
 
         return $this->render('@KrichaDoctrineAudit/Audit/entity_history.html.twig', [
-            'id'      => $id,
-            'entity'  => $entity,
-            'entries' => $entries,
+            'id'            => $id,
+            'entity'        => $entity,
+            'changer_route' => $auditReader->getChangerRoute(),
+            'entries'       => $entries,
         ]);
     }
 
@@ -60,8 +61,9 @@ class AuditController extends AbstractController
         $data   = $auditReader->getAudit($entity, $id);
 
         return $this->render('@KrichaDoctrineAudit/Audit/entity_history_entry.html.twig', [
-            'entity' => $entity,
-            'entry'  => $data[0],
+            'entity'        => $entity,
+            'changer_route' => $auditReader->getChangerRoute(),
+            'entry'         => $data[0],
         ]);
     }
 }

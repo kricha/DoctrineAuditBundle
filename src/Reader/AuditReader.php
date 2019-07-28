@@ -25,10 +25,18 @@ class AuditReader
 
     private $filter;
 
-    public function __construct(AuditConfiguration $configuration, EntityManagerInterface $entityManager)
+    private $changerRoute;
+
+    public function __construct(AuditConfiguration $configuration, EntityManagerInterface $entityManager, array $bundleConfig)
     {
+        $this->changerRoute  = $bundleConfig['changer_route'] ?? null;
         $this->configuration = $configuration;
         $this->entityManager = $entityManager;
+    }
+
+    public function getChangerRoute(): ?string
+    {
+        return $this->changerRoute;
     }
 
     public function getConfiguration(): AuditConfiguration

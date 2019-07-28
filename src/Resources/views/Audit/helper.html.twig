@@ -13,7 +13,7 @@
 {% endmacro dump %}
 
 
-{% macro humanize(entity, entry) %}
+{% macro humanize(entity, entry, changer_route) %}
     {% set diffs = entry.diff|json_decode(true) %}
     {% set subject = entity|namespace_to_short_class~' #'~entry.object_id %}
 
@@ -52,7 +52,17 @@
             (<em>{{ _self.dump(target) }}</em>)
         {% endif %}
     {% endif %}
-    by <b>{{ entry.changer is null ? 'unknown user' : entry.changer }}</b>
+    {% set changer = entry.changer|split('|||') %}
+    by {% if changer|length == 2 %}
+    {% if changer_route %}
+        <a href="{{ path(changer_route, {id: changer[1]}) }}" target="_blank">{{ changer[0] }}</a>
+    {% else %}
+        <b>{{ changer[0] }}</b>
+    {% endif %}
+{% else %}
+    <b>{{ entry.changer|length ? entry.changer : 'unknown user' }}</b>
+{% endif %}
+
 {% endmacro %}
 
 {% macro badge(text, type) %}

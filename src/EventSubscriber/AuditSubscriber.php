@@ -29,7 +29,7 @@ class AuditSubscriber implements EventSubscriber
     {
         $em  = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
-        
+
         $this->manager->collectScheduledUpdates($uow, $em);
         $this->manager->collectScheduledInsertions($uow, $em);
         $this->manager->collectScheduledDeletions($uow, $em);

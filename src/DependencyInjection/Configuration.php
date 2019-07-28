@@ -27,6 +27,9 @@ class Configuration implements ConfigurationInterface
         );
         $rootNode
             ->children()
+            ->scalarNode('changer_route')
+            ->defaultValue('')
+            ->end()
             ->scalarNode('table_prefix')
             ->defaultValue('')
             ->end()

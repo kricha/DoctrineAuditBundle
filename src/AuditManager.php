@@ -29,7 +29,9 @@ class AuditManager
     {
         $this->auditConfiguration = $auditConfiguration;
     }
-    public function resetChangeset(){
+
+    public function resetChangeset(): void
+    {
         $this->changes = [];
     }
 

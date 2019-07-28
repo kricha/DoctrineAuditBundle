@@ -12,12 +12,11 @@ services:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
     Kricha\DoctrineAuditBundle\Reader\AuditReader:
-        arguments: ['@Kricha\DoctrineAuditBundle\AuditConfiguration', '@Doctrine\ORM\EntityManagerInterface']
-    
+        arguments: ['@Kricha\DoctrineAuditBundle\AuditConfiguration', '@Doctrine\ORM\EntityManagerInterface', '%kricha_doctrine_audit.configuration%']
+
     Kricha\DoctrineAuditBundle\Twig\Extension\EntityAuditExtension:
         tags: ['twig.extension']
     Kricha\DoctrineAuditBundle\User\TokenStorageUsernameCallable:
-        arguments: ["%kricha_doctrine_audit.configuration%"]
         calls:
             - [setToken, ['@security.token_storage']]
     Kricha\DoctrineAuditBundle\AuditConfiguration:
