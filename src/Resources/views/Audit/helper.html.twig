@@ -7,7 +7,7 @@
                 {{ k }}: {{ _self.dump(v) }}{{ separator|default('<br/>')|raw }}
             {% endfor %}
         {% else %}
-            {{ value }}
+            {{ value is same as(false) ? '0' : value }}
         {% endif %}
     {% endspaceless %}
 {% endmacro dump %}
