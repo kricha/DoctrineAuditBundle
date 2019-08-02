@@ -33,13 +33,12 @@ class AuditSubscriber implements EventSubscriber
         $this->manager->collectScheduledUpdates($uow, $em);
         $this->manager->collectScheduledInsertions($uow, $em);
         $this->manager->collectScheduledDeletions($uow, $em);
+        $this->manager->collectScheduledCollectionDeletions($uow, $em);
         $this->manager->collectScheduledCollectionUpdates($uow, $em);
-        $this->manager->collectScheduledDeletions($uow, $em);
 
         $this->loggerBackup = $em->getConnection()->getConfiguration()->getSQLLogger();
         $loggerChain        = new LoggerChain();
         $loggerChain->addLogger(new AuditLogger(function () use ($em): void {
-            // flushes pending data
             $em->getConnection()->getConfiguration()->setSQLLogger($this->loggerBackup);
             $this->manager->processChanges($em);
             $this->manager->resetChangeset();

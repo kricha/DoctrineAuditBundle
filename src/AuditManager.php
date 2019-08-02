@@ -75,13 +75,32 @@ class AuditManager
             if ($this->auditConfiguration->isAudited($entity)) {
                 $uow->initializeObject($entity);
                 $id                            = $this->id($em, $entity);
+                $changes                       = [];
+                $entityClassName               = \get_class($entity);
+
+                foreach ((array) $entity as $fieldName => $value) {
+                    $realFieldName = \str_replace(["\x00*\x00", "\x00${entityClassName}\x00"], '', $fieldName);
+                    if (\is_object($value)) {
+                        if (\method_exists($value, '__toString')) {
+                            $realValue = (string) $value;
+                        } elseif ($value instanceof \DateTime) {
+                            $realValue = $value->format('r');
+                        } else {
+                            $realValue = \get_class($value).'#'.$this->id($em, $value);
+                        }
+                    } else {
+                        $realValue = $value;
+                    }
+                    $changes[$realFieldName]['old'] = $realValue;
+                    $changes[$realFieldName]['new'] = null;
+                }
+
                 $this->changes[]               = [
                     'action' => self::DELETE,
                     'data'   => [
-                        $entity,
-                        $entity,
-                        $this->summarize($em, $entity, $id),
-                        $id,
+                        'entity' => $entity,
+                        'diff'   => $changes,
+                        'id'     => $id,
                     ],
                 ];
             }
@@ -308,7 +327,7 @@ class AuditManager
                         $query = $this->update($em, $data[0], $data[1]);
                         break;
                     case self::DELETE:
-                        $query = $this->remove($em, $data[0], $data[1], $data[2]);
+                        $query = $this->remove($em, $data['entity'], $data['diff'], $data['id']);
                         break;
                     case self::ASSOCIATE:
                     case self::DISSOCIATE:

@@ -19,7 +19,9 @@
                 </ol>
             </nav>
 
-            <h4 class="card-title float-left"><code>{{ entity|namespace_to_short_class }}{% if id is not null %}#{{ id }}{% endif %}</code> <em>(most recent first)</em></h4>
+            <h4 class="card-title float-left">
+                <code>{{ entity|namespace_to_short_class }}{% if id is not null %}#{{ id }}{% endif %}</code> <em>(most
+                    recent first)</em></h4>
             <h5 class="float-right">{{ helper.badge(entries|length ~ ' operations', 'primary') }}</h5>
 
             <div class="timeline-centered">
@@ -36,12 +38,13 @@
                             </div>
                             <div class="timeline-label">
                                 <div class="row">
-                                    <div class="col-lg-11"><h2 class="mb-0">{{ helper.humanize(entity, entry, changer_route) }}</h2>
+                                    <div class="col-lg-11"><h2
+                                                class="mb-0">{{ helper.humanize(entity, entry, changer_route) }}</h2>
                                     </div>
                                     <div class="col-lg-1"
                                          align="center">{{ helper.badge(entry.type, entry.type|audi_label_type) }}</div>
                                 </div>
-                                {% if entry.type in [constant('Kricha\\DoctrineAuditBundle\\AuditManager::INSERT'), constant('Kricha\\DoctrineAuditBundle\\AuditManager::UPDATE')] %}
+                                {% if entry.type in [constant('Kricha\\DoctrineAuditBundle\\AuditManager::INSERT'), constant('Kricha\\DoctrineAuditBundle\\AuditManager::UPDATE'), constant('Kricha\\DoctrineAuditBundle\\AuditManager::DELETE')] %}
                                     <table class="table table-hover table-sm mt-2 mb-0">
                                         <thead class="thead-light">
                                         <th width="30%">Property</th>

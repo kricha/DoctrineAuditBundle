@@ -23,7 +23,6 @@
         {% set action = 'updated' %}
     {% elseif entry.type == constant('Kricha\\DoctrineAuditBundle\\AuditManager::DELETE') %}
         {% set action = 'deleted' %}
-        {% set source = diffs %}
     {% elseif entry.type == constant('Kricha\\DoctrineAuditBundle\\AuditManager::ASSOCIATE') %}
         {% set action = 'associated' %}
         {% set source = diffs.source %}

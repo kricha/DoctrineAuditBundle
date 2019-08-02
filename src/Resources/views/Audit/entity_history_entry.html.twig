@@ -3,88 +3,88 @@
 {% import '@KrichaDoctrineAudit/Audit/helper.html.twig' as helper %}
 
 {% block entity_audit_content %}
-<div class="card border-0">
-    <div class="card-body">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('kricha_doctrine_entity_audit_list') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('kricha_doctrine_entity_audit_history', {'entity': entity|namespace_to_param}) }}">{{ entity|namespace_to_short_class }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('kricha_doctrine_entity_audit_entry', {'entity': entity|namespace_to_param, 'id': entry.object_id}) }}">{{ entity|namespace_to_short_class }} #{{ entry.object_id }}</a></li>
-            </ol>
-        </nav>
+    <div class="card border-0">
+        <div class="card-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('kricha_doctrine_entity_audit_list') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('kricha_doctrine_entity_audit_history', {'entity': entity|namespace_to_param}) }}">{{ entity|namespace_to_short_class }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="{{ path('kricha_doctrine_entity_audit_entry', {'entity': entity|namespace_to_param, 'id': entry.object_id}) }}">{{ entity|namespace_to_short_class }} #{{ entry.object_id }}</a></li>
+                </ol>
+            </nav>
 
-        <h4 class="card-title float-left"><code>{{ entity|namespace_to_short_class }} #{{ entry.object_id }}</code></h4>
-        <h5 class="float-right">{{ helper.badge(entry.type, entry.type|audi_label_type) }}</h5>
-        <h6 style="clear: both">{{ helper.humanize(entity, entry) }}</h6>
+            <h4 class="card-title float-left"><code>{{ entity|namespace_to_short_class }} #{{ entry.object_id }}</code></h4>
+            <h5 class="float-right">{{ helper.badge(entry.type, entry.type|audi_label_type) }}</h5>
+            <h6 style="clear: both">{{ helper.humanize(entity, entry) }}</h6>
 
-    {% if entry.type in ['associate', 'dissociate'] %}
-        <table class="table table-hover table-sm">
-            <thead class="thead-light">
-                <th>Property</th>
-                <th>Target</th>
-            </thead>
-            <tbody>
-            {% for key, value in diff.target %}
-                <tr>
-                    <td><code>{{ key }}</code></td>
-                    <td>{{ helper.text(helper.dump(value), 'secondary') }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% elseif entry.type == 'remove' %}
-        <table class="table table-hover table-sm">
-            <thead class="thead-light">
-                <th>Property</th>
-                <th>Target</th>
-            </thead>
-            <tbody>
-            {% for key, value in diff %}
-                <tr>
-                    <td><code>{{ key }}</code></td>
-                    <td>{{ helper.text(helper.dump(value), 'secondary') }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <table class="table table-hover table-sm">
-            <thead class="thead-light">
-                <th>Property</th>
-                <th>Old value</th>
-                <th>New value</th>
-            </thead>
-            <tbody>
-            {% for key, values in entry.diff|json_decode(true) %}
-                <tr>
-                    <td><code>{{ key }}</code></td>
-                    <td>
-                        {% if values.old is defined %}
-                            {% if values.old is null %}
-                                {{ helper.badge('null', 'secondary') }}
-                            {% else %}
-                                {{ helper.text(helper.dump(values.old), 'danger') }}
-                            {% endif %}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if values.new is defined %}
-                            {% if values.new is null %}
-                                {{ helper.badge('null', 'secondary') }}
-                            {% else %}
-                                {% if values.old is null %}
-                                    {{ helper.text(helper.dump(values.new), 'primary') }}
-                                {% else %}
-                                    {{ helper.text(helper.dump(values.new), 'success') }}
+            {% if entry.type in ['associate', 'dissociate'] %}
+                <table class="table table-hover table-sm">
+                    <thead class="thead-light">
+                    <th>Property</th>
+                    <th>Target</th>
+                    </thead>
+                    <tbody>
+                    {% for key, value in diff.target %}
+                        <tr>
+                            <td><code>{{ key }}</code></td>
+                            <td>{{ helper.text(helper.dump(value), 'secondary') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% elseif entry.type == 'remove' %}
+                <table class="table table-hover table-sm">
+                    <thead class="thead-light">
+                    <th>Property</th>
+                    <th>Target</th>
+                    </thead>
+                    <tbody>
+                    {% for key, value in diff %}
+                        <tr>
+                            <td><code>{{ key }}</code></td>
+                            <td>{{ helper.text(helper.dump(value), 'secondary') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <table class="table table-hover table-sm">
+                    <thead class="thead-light">
+                    <th>Property</th>
+                    <th>Old value</th>
+                    <th>New value</th>
+                    </thead>
+                    <tbody>
+                    {% for key, values in entry.diff|json_decode(true) %}
+                        <tr>
+                            <td><code>{{ key }}</code></td>
+                            <td>
+                                {% if values.old is defined %}
+                                    {% if values.old is null %}
+                                        {{ helper.badge('null', 'secondary') }}
+                                    {% else %}
+                                        {{ helper.text(helper.dump(values.old), 'danger') }}
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
+                            </td>
+                            <td>
+                                {% if values.new is defined %}
+                                    {% if values.new is null %}
+                                        {{ helper.badge('null', 'secondary') }}
+                                    {% else %}
+                                        {% if values.old is null %}
+                                            {{ helper.text(helper.dump(values.new), 'primary') }}
+                                        {% else %}
+                                            {{ helper.text(helper.dump(values.new), 'success') }}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
     </div>
-</div>
 {% endblock entity_audit_content %}
