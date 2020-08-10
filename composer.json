@@ -11,10 +11,10 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
-        "symfony/orm-pack": "^1.0",
-        "symfony/security-bundle": "^3.4 || ^4.0",
-        "white-october/pagerfanta-bundle": "^1.2"
+        "php": "^7.2",
+        "doctrine/doctrine-bundle": "^2.1",
+        "doctrine/orm": "^2.7",
+        "babdev/pagerfanta-bundle": "^2.5"
     },
     "autoload": {
         "psr-4": {

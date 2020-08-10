@@ -64,7 +64,7 @@ class AppKernel extends Kernel
         $bundles = array(
             // ...
             new Kricha\DoctrineAuditBundle\KrichaDoctrineAuditBundle(),
-            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(), // only required if you plan to use included viewer/templates
+            new BabDev\PagerfantaBundle\BabDevPagerfantaBundle(), // only required if you plan to use included viewer/templates
         );
 
         // ...
