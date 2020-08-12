@@ -1,5 +1,5 @@
 {% macro dump(value, separator) %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% if value.label is defined %}
             {{ value.label }}
         {% elseif value is iterable %}
@@ -9,7 +9,7 @@
         {% else %}
             {{ value is same as(false) ? '0' : value }}
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endmacro dump %}
 
 
