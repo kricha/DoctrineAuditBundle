@@ -12,6 +12,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
+use Doctrine\ORM\PersistentCollection;
 
 class AuditManager
 {
@@ -85,6 +86,8 @@ class AuditManager
                             $realValue = (string) $value;
                         } elseif ($value instanceof \DateTime) {
                             $realValue = $value->format('r');
+                        } elseif ($value instanceof PersistentCollection) {
+                            continue;
                         } else {
                             $realValue = \get_class($value).'#'.$this->id($em, $value);
                         }
