@@ -13,9 +13,10 @@
     "require": {
         "php": "^8",
         "doctrine/orm": "^2.9",
-        "babdev/pagerfanta-bundle": "^2.5",
+        "babdev/pagerfanta-bundle": "^3.0",
         "symfony/framework-bundle": "^5.3",
-        "twig/twig": "^3.3"
+        "twig/twig": "^3.3",
+        "pagerfanta/doctrine-dbal-adapter": "^3.3"
     },
     "autoload": {
         "psr-4": {

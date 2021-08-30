@@ -12,7 +12,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManagerInterface;
 use Kricha\DoctrineAuditBundle\AuditConfiguration;
-use Pagerfanta\Adapter\DoctrineDbalSingleTableAdapter;
+use Pagerfanta\Doctrine\DBAL\SingleTableQueryAdapter;
 use Pagerfanta\Pagerfanta;
 
 class AuditReader
@@ -104,7 +104,7 @@ class AuditReader
     {
         $queryBuilder = $this->getAuditsQueryBuilder($entity, $id);
 
-        $adapter = new DoctrineDbalSingleTableAdapter($queryBuilder, 'at.id');
+        $adapter = new SingleTableQueryAdapter($queryBuilder, 'at.id');
 
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta
