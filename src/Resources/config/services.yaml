@@ -1,5 +1,7 @@
 services:
     _defaults:
+        autowire: true
+        autoconfigure: true
         public: false
     Kricha\DoctrineAuditBundle\Controller\AuditController:
         tags: ['controller.service_arguments']
