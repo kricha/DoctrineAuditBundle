@@ -426,6 +426,14 @@ class AuditManager
             case Type::BOOLEAN:
                 $convertedValue = $type->convertToPHPValue($value, $platform);
                 break;
+            case Type::BLOB:
+                if (\is_resource($value)) {
+                    $convertedValue = base64_encode(stream_get_contents($value));
+                    rewind($value);
+                } else {
+                    $convertedValue = base64_encode($value);
+                }
+                break;
             default:
                 $convertedValue = $type->convertToDatabaseValue($value, $platform);
         }
