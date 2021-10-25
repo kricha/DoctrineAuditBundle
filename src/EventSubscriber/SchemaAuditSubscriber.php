@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Kricha\DoctrineAuditBundle\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Tools\Event\GenerateSchemaTableEventArgs;
 use Doctrine\ORM\Tools\ToolEvents;
@@ -19,34 +19,34 @@ class SchemaAuditSubscriber implements EventSubscriber
 {
     private const AUDIT_TABLE_COLUMNS = [
         'id'         => [
-            'type'    => Type::INTEGER,
+            'type'    => Types::INTEGER,
             'options' => [
                 'autoincrement' => true,
                 'unsigned'      => true,
             ],
         ],
         'type'       => [
-            'type'    => Type::STRING,
+            'type'    => Types::STRING,
             'options' => [
                 'notnull' => true,
                 'length'  => 10,
             ],
         ],
         'object_id'  => [
-            'type'    => Type::STRING,
+            'type'    => Types::STRING,
             'options' => [
                 'notnull' => true,
             ],
         ],
         'diff'       => [
-            'type'    => Type::JSON_ARRAY,
+            'type'    => Types::JSON,
             'options' => [
                 'default' => null,
                 'notnull' => false,
             ],
         ],
         'changer'    => [
-            'type'    => Type::STRING,
+            'type'    => Types::STRING,
             'options' => [
                 'default' => null,
                 'notnull' => false,
@@ -54,7 +54,7 @@ class SchemaAuditSubscriber implements EventSubscriber
             ],
         ],
         'created_at' => [
-            'type'    => Type::DATETIME,
+            'type'    => Types::DATETIME_MUTABLE,
             'options' => [
                 'notnull' => true,
             ],
