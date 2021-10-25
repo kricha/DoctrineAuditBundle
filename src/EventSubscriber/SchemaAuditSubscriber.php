@@ -54,7 +54,7 @@ class SchemaAuditSubscriber implements EventSubscriber
             ],
         ],
         'created_at' => [
-            'type'    => Types::DATETIME,
+            'type'    => Types::DATETIME_MUTABLE,
             'options' => [
                 'notnull' => true,
             ],
