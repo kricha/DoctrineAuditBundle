@@ -10,6 +10,7 @@ namespace Kricha\DoctrineAuditBundle;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\PersistentCollection;
@@ -409,24 +410,24 @@ class AuditManager
         }
         $platform = $em->getConnection()->getDatabasePlatform();
         switch ($type->getName()) {
-            case Type::DECIMAL:
+            case Types::DECIMAL:
                 if ($mapping) {
                     $convertedValue = \number_format((float) $value, $mapping['scale'], '.', '');
                     break;
                 }
             // no break
-            case Type::BIGINT:
+            case Types::BIGINT:
                 $convertedValue = (string) $value;
                 break;
-            case Type::INTEGER:
-            case Type::SMALLINT:
+            case Types::INTEGER:
+            case Types::SMALLINT:
                 $convertedValue = (int) $value;
                 break;
-            case Type::FLOAT:
-            case Type::BOOLEAN:
+            case Types::FLOAT:
+            case Types::BOOLEAN:
                 $convertedValue = $type->convertToPHPValue($value, $platform);
                 break;
-            case Type::BLOB:
+            case Types::BLOB:
                 if (\is_resource($value)) {
                     $convertedValue = base64_encode(stream_get_contents($value));
                     rewind($value);
