@@ -132,7 +132,7 @@ class AuditReader
             ->resetQueryPart('orderBy')
             ->select('COUNT(1)')
             ->execute()
-            ->fetchColumn(0)
+            ->fetchOne()
         ;
 
         return (int) $result;
