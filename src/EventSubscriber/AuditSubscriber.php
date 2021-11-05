@@ -10,10 +10,10 @@ namespace Kricha\DoctrineAuditBundle\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Logging\LoggerChain;
-use Doctrine\DBAL\Logging\SQLLogger;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Kricha\DoctrineAuditBundle\AuditManager;
+use Kricha\DoctrineAuditBundle\DBAL\Logging\AuditLogger;
 
 class AuditSubscriber implements EventSubscriber
 {
@@ -34,10 +34,17 @@ class AuditSubscriber implements EventSubscriber
         $this->manager->collectScheduledDeletions($uow, $em);
         $this->manager->collectScheduledCollectionDeletions($uow, $em);
         $this->manager->collectScheduledCollectionUpdates($uow, $em);
-        $logger = $em->getConnection()->getConfiguration()->getSQLLogger();
-        $em->getConnection()->getConfiguration()->setSQLLogger($logger);
-        $this->manager->processChanges($em);
-        $this->manager->resetChangeset();
+
+        $this->loggerBackup = $em->getConnection()->getConfiguration()->getSQLLogger();
+        $loggerChain        = new LoggerChain([
+            new AuditLogger(function () use ($em): void {
+                $em->getConnection()->getConfiguration()->setSQLLogger($this->loggerBackup);
+                $this->manager->processChanges($em);
+                $this->manager->resetChangeset();
+            })
+        ]);
+
+        $em->getConnection()->getConfiguration()->setSQLLogger($loggerChain);
     }
 
     /**
