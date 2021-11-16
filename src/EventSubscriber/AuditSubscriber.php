@@ -26,6 +26,7 @@ class AuditSubscriber implements EventSubscriber
 
     public function onFlush(OnFlushEventArgs $args): void
     {
+        $loggers = [];
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
 
@@ -36,12 +37,18 @@ class AuditSubscriber implements EventSubscriber
         $this->manager->collectScheduledCollectionUpdates($uow, $em);
 
         $defaultLogger = $em->getConnection()->getConfiguration()->getSQLLogger();
+        if ($defaultLogger) {
+            $loggers[] = $defaultLogger;
+        }
+
         $auditLogger = new AuditLogger(function () use ($em): void {
             $this->manager->processChanges($em);
             $this->manager->resetChangeset();
         });
-        
-        $loggerChain = new LoggerChain([$defaultLogger, $auditLogger]);
+
+        $loggers[] = $auditLogger;
+
+        $loggerChain = new LoggerChain($loggers);
         $em->getConnection()->getConfiguration()->setSQLLogger($loggerChain);
     }
 
