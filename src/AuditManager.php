@@ -162,7 +162,7 @@ class AuditManager
             if ($this->auditConfiguration->isAudited($collection->getOwner())) {
                 $mapping = $collection->getMapping();
                 foreach ($collection->toArray() as $entity) {
-                    if (!$this->configuration->isAudited($entity)) {
+                    if (!$this->auditConfiguration->isAudited($entity)) {
                         continue;
                     }
                     $diff = [
