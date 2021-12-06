@@ -20,12 +20,13 @@ class TokenStorageUsernameCallable
     public function __invoke(): ?string
     {
         $token = $this->tokenStorage->getToken();
-        if (null !== $token && $token->isAuthenticated()) {
-            $data  = [$token->getUsername()];
-            if ($user = $token->getUser()) {
-                if (\method_exists($user, 'getId')) {
-                    $data[] = $user->getId();
-                }
+        if (null !== $token && $token->getUser() !== null) {
+            // @deprecated since Symfony 5.3, change to $token->getUserIdentifier() in 6.0
+            $username = \method_exists($token, 'getUserIdentifier') ? $token->getUserIdentifier() : $token->getUsername();
+            $data  = [$username];
+            $user = $token->getUser();
+            if ($user && \method_exists($user, 'getId')) {
+                $data[] = $user->getId();
             }
 
             return \implode('|||', $data);
