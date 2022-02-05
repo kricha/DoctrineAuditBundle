@@ -14,7 +14,7 @@
         "php": "^8",
         "doctrine/orm": "^2.9",
         "babdev/pagerfanta-bundle": "^3.0",
-        "symfony/framework-bundle": "^5.3",
+        "symfony/framework-bundle": "^5.0|^6.0",
         "twig/twig": "^3.3",
         "pagerfanta/doctrine-dbal-adapter": "^3.3"
     },
